@@ -29,7 +29,11 @@ namespace ElasticsearchSupplyCollector
 
         public override bool TestConnection(DataContainer container)
         {
-            throw new NotImplementedException();
+            var client = new ElasticsearchClientBuilder(container.ConnectionString).GetClient();
+
+            var resp = client.Ping();
+
+            return resp.IsValid;
         }
     }
 }
