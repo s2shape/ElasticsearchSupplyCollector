@@ -1,7 +1,7 @@
 using FluentAssertions;
 using S2.BlackSwan.SupplyCollector.Models;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace ElasticsearchSupplyCollector.Tests
@@ -14,6 +14,8 @@ namespace ElasticsearchSupplyCollector.Tests
         {
             ConnectionString = "http://localhost:9200"
         };
+
+        private readonly List<string> KNOWN_INDEXES = new List<string>{ "people" };
 
         public ElasticsearchSupplyCollectorTests()
         {
@@ -39,6 +41,16 @@ namespace ElasticsearchSupplyCollector.Tests
 
             // assert
             result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void GetDataCollectionMetrics()
+        {
+            // act
+            var result = _sut.GetDataCollectionMetrics(_container);
+
+            // assert
+            result.Select(m => m.Name).Should().BeEquivalentTo(KNOWN_INDEXES);
         }
     }
 }

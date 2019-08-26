@@ -2,6 +2,7 @@
 using S2.BlackSwan.SupplyCollector.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ElasticsearchSupplyCollector
 {
@@ -19,7 +20,27 @@ namespace ElasticsearchSupplyCollector
 
         public override List<DataCollectionMetrics> GetDataCollectionMetrics(DataContainer container)
         {
-            throw new NotImplementedException();
+            var client = new ElasticsearchClientBuilder(container.ConnectionString).GetClient();
+
+            var indices = client.Cat.Indices();
+
+            var metrics = indices.Records
+                .Where(idx => idx.Index != ".kibana") // this index has been created by Kibana (GUI for Elasticsearch) automatically.
+                .Select(idx =>
+            {
+                long.TryParse(idx.DocsCount, out var docsCount);
+                decimal.TryParse(idx.StoreSize.Replace("kb", ""), out var storeSize);
+
+                return new DataCollectionMetrics
+                {
+                    Name = idx.Index,
+                    RowCount = docsCount,
+                    TotalSpaceKB = storeSize,
+                    UsedSpaceKB = storeSize
+                };
+            }).ToList();
+
+            return metrics;
         }
 
         public override (List<DataCollection>, List<DataEntity>) GetSchema(DataContainer container)
