@@ -66,15 +66,19 @@ namespace ElasticsearchSupplyCollector
         {
             //var resp = client.LowLevel.Search<IElasticsearchResponse>(null);
 
-            var response = client.Search<EsDocument>(s => s
-                .Index(index)
-                .From(0)
-                .Size(DEFAULT_SCHEMA_SAMPLE_SIZE)
-            );
+            //var response = client.Search<EsDocument>(s => s
+            //    .Index(index)
+            //    .From(0)
+            //    .Size(DEFAULT_SCHEMA_SAMPLE_SIZE)
+            //);
 
-            //client.GetMa
+            var response = client.Indices.GetMapping(new GetMappingRequest(Indices.AllIndices));
 
-            var json = JsonConvert.SerializeObject(response.Documents);
+            //        var mappingResponse = client.GetMapping<MyDocument>(m => m
+            //.AllIndices()
+            //.AllTypes()
+
+            var json = JsonConvert.SerializeObject(response.Indices);
 
             //response.
             //var resp = client.LowLevel.;
