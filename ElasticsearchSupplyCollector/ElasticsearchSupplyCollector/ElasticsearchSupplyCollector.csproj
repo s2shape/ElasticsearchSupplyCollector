@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="NEST" Version="7.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="S2.SupplyCollector" Version="1.1.1" />
   </ItemGroup>
 

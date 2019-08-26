@@ -23,6 +23,14 @@ namespace ElasticsearchSupplyCollector.Tests
         }
 
         [Fact]
+        public void GetSchema()
+        {
+            var (collections, entities) = _sut.GetSchema(_container);
+
+
+        }
+
+        [Fact]
         public void DataStoreTypes_returns_elasticsearch()
         {
             // act

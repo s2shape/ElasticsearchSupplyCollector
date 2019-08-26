@@ -1,4 +1,7 @@
-﻿using S2.BlackSwan.SupplyCollector;
+﻿using Elasticsearch.Net;
+using Nest;
+using Newtonsoft.Json;
+using S2.BlackSwan.SupplyCollector;
 using S2.BlackSwan.SupplyCollector.Models;
 using System;
 using System.Collections.Generic;
@@ -8,6 +11,8 @@ namespace ElasticsearchSupplyCollector
 {
     public class ElasticsearchSupplyCollector : SupplyCollectorBase
     {
+        const int DEFAULT_SCHEMA_SAMPLE_SIZE = 10;
+
         public override List<string> CollectSample(DataEntity dataEntity, int sampleSize)
         {
             throw new NotImplementedException();
@@ -45,6 +50,36 @@ namespace ElasticsearchSupplyCollector
 
         public override (List<DataCollection>, List<DataEntity>) GetSchema(DataContainer container)
         {
+            var indexes = GetDataCollectionMetrics(container)
+                .Select(m => m.Name)
+                .ToList();
+
+            var client = new ElasticsearchClientBuilder(container.ConnectionString).GetClient();
+
+            var dataEntities = indexes.SelectMany(idx => GetSchema(idx, client));
+            var dataCollections = indexes.Select(idx => new DataCollection(container, idx));
+
+            return (dataCollections.ToList(), dataEntities.ToList());
+        }
+
+        private List<DataEntity> GetSchema(string index, ElasticClient client)
+        {
+            //var resp = client.LowLevel.Search<IElasticsearchResponse>(null);
+
+            var response = client.Search<EsDocument>(s => s
+                .Index(index)
+                .From(0)
+                .Size(DEFAULT_SCHEMA_SAMPLE_SIZE)
+            );
+
+            //client.GetMa
+
+            var json = JsonConvert.SerializeObject(response.Documents);
+
+            //response.
+            //var resp = client.LowLevel.;
+
+
             throw new NotImplementedException();
         }
 
@@ -55,6 +90,11 @@ namespace ElasticsearchSupplyCollector
             var resp = client.Ping();
 
             return resp.IsValid;
+        }
+
+        private class EsDocument
+        {
+            public string FirstName { get; set; }
         }
     }
 }
