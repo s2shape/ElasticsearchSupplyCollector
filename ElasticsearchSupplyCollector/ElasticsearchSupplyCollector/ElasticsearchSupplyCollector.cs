@@ -27,7 +27,7 @@ namespace ElasticsearchSupplyCollector
         {
             var client = new ElasticsearchClientBuilder(container.ConnectionString).GetClient();
 
-            var indices = client.Cat.Indices();
+            var indices = client.CatIndices();
 
             var metrics = indices.Records
                 .Where(idx => idx.Index != ".kibana") // this index has been created by Kibana (GUI for Elasticsearch) automatically.
@@ -72,13 +72,14 @@ namespace ElasticsearchSupplyCollector
             //    .Size(DEFAULT_SCHEMA_SAMPLE_SIZE)
             //);
 
-            var response = client.Indices.GetMapping(new GetMappingRequest(Indices.AllIndices));
+            var response = client.GetMapping(new GetMappingRequest(Indices.AllIndices));
 
             //        var mappingResponse = client.GetMapping<MyDocument>(m => m
             //.AllIndices()
             //.AllTypes()
 
-            var json = JsonConvert.SerializeObject(response.Indices);
+            var json = JsonConvert.SerializeObject(((dynamic)response).Mapping);
+            // ((dynamic)response).Mapping contains the data we need.
 
             //response.
             //var resp = client.LowLevel.;
