@@ -17,7 +17,7 @@ namespace ElasticsearchSupplyCollector.Tests
 
         private readonly DataCollection _collection;
 
-        private readonly List<string> KNOWN_INDEXES = new List<string>{ "people" };
+        private readonly List<string> KNOWN_INDEXES = new List<string> { "people" };
 
         public ElasticsearchSupplyCollectorTests()
         {
@@ -29,7 +29,7 @@ namespace ElasticsearchSupplyCollector.Tests
         public void GetSchema_contains_nested_object_leaf_properties()
         {
             var (collections, entities) = _sut.GetSchema(_container);
-                       
+
             var expected = new List<DataEntity>()
             {
                 new DataEntity("addresses.type1.zip", DataType.String, "text", _container, _collection),
@@ -37,7 +37,7 @@ namespace ElasticsearchSupplyCollector.Tests
                 new DataEntity("addresses.type1.street1", DataType.String, "text", _container, _collection),
                 new DataEntity("addresses.type1.city", DataType.String, "text", _container, _collection),
                 new DataEntity("addresses.type1.state", DataType.String, "text", _container, _collection),
-                                
+
                 new DataEntity("addresses.type0.zip", DataType.String, "text", _container, _collection),
                 new DataEntity("addresses.type0.street2", DataType.String, "text", _container, _collection),
                 new DataEntity("addresses.type0.street1", DataType.String, "text", _container, _collection),
@@ -49,6 +49,27 @@ namespace ElasticsearchSupplyCollector.Tests
             entities
                 .Where(e => expectedNames.Contains(e.Name))
                 .Should().BeEquivalentTo(expected);
+        }
+
+        [Fact]
+        public void GetSchema_list_of_objects()
+        {
+            var (collections, entities) = _sut.GetSchema(_container);
+
+            // assert
+            var expected = new List<DataEntity>()
+            {
+                new DataEntity("phoneNumbers.countryCode", DataType.String, "text", _container, _collection),
+                new DataEntity("phoneNumbers.number", DataType.String, "text", _container, _collection),
+                new DataEntity("phoneNumbers.type", DataType.String, "text", _container, _collection)
+            };
+            var expectedNames = expected.Select(x => x.Name).ToList();
+
+            var result = entities
+                .Where(e => expectedNames.Contains(e.Name))
+                .ToList();
+
+            result.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
