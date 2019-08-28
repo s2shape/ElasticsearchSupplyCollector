@@ -29,7 +29,7 @@ namespace ElasticsearchSupplyCollector.Tests
         public void GetSchema_contains_nested_object_leaf_properties()
         {
             var (collections, entities) = _sut.GetSchema(_container);
-
+                       
             var expected = new List<DataEntity>()
             {
                 new DataEntity("addresses.type1.zip", DataType.String, "text", _container, _collection),
@@ -44,8 +44,11 @@ namespace ElasticsearchSupplyCollector.Tests
                 new DataEntity("addresses.type0.city", DataType.String, "text", _container, _collection),
                 new DataEntity("addresses.type0.state", DataType.String, "text", _container, _collection)
             };
+            var expectedNames = expected.Select(x => x.Name).ToList();
 
-            entities.Should().Contain(expected);
+            entities
+                .Where(e => expectedNames.Contains(e.Name))
+                .Should().BeEquivalentTo(expected);
         }
 
         [Fact]
