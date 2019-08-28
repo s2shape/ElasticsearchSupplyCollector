@@ -52,40 +52,31 @@ namespace ElasticsearchSupplyCollector
         {
             var indexes = GetDataCollectionMetrics(container)
                 .Select(m => m.Name)
+                .Where(x => x == "people")
                 .ToList();
 
             var client = new ElasticsearchClientBuilder(container.ConnectionString).GetClient();
 
-            var dataEntities = indexes.SelectMany(idx => GetSchema(idx, client));
+            var mappings = client.GetMapping(new GetMappingRequest(Indices.AllIndices));
+
+            var dataEntities = indexes.SelectMany(idx => GetSchema(idx, mappings, container, client));
             var dataCollections = indexes.Select(idx => new DataCollection(container, idx));
 
             return (dataCollections.ToList(), dataEntities.ToList());
         }
 
-        private List<DataEntity> GetSchema(string index, ElasticClient client)
+        private List<DataEntity> GetSchema(string index, 
+            IGetMappingResponse mappings, 
+            DataContainer container, 
+            ElasticClient client)
         {
-            //var resp = client.LowLevel.Search<IElasticsearchResponse>(null);
+            var properties = mappings.Indices[index].Mappings.Values.First().Properties.ToList();
 
-            //var response = client.Search<EsDocument>(s => s
-            //    .Index(index)
-            //    .From(0)
-            //    .Size(DEFAULT_SCHEMA_SAMPLE_SIZE)
-            //);
+            var collection = new DataCollection(container, index);
 
-            var response = client.GetMapping(new GetMappingRequest(Indices.AllIndices));
-
-            //        var mappingResponse = client.GetMapping<MyDocument>(m => m
-            //.AllIndices()
-            //.AllTypes()
-
-            var json = JsonConvert.SerializeObject(((dynamic)response).Mapping);
-            // ((dynamic)response).Mapping contains the data we need.
-
-            //response.
-            //var resp = client.LowLevel.;
-
-
-            throw new NotImplementedException();
+            var dataEntities = properties.SelectMany(p => GetSchemaExtensions.GetSchema(p, container, collection)).ToList();
+            
+            return dataEntities;
         }
 
         public override bool TestConnection(DataContainer container)

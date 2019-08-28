@@ -10,24 +10,42 @@ namespace ElasticsearchSupplyCollector.Tests
     {
         private readonly ElasticsearchSupplyCollector _sut;
 
-        private DataContainer _container = new DataContainer
+        private readonly DataContainer _container = new DataContainer
         {
             ConnectionString = "http://localhost:9200"
         };
+
+        private readonly DataCollection _collection;
 
         private readonly List<string> KNOWN_INDEXES = new List<string>{ "people" };
 
         public ElasticsearchSupplyCollectorTests()
         {
             _sut = new ElasticsearchSupplyCollector();
+            _collection = new DataCollection(_container, "people");
         }
 
         [Fact]
-        public void GetSchema()
+        public void GetSchema_contains_nested_object_leaf_properties()
         {
             var (collections, entities) = _sut.GetSchema(_container);
 
+            var expected = new List<DataEntity>()
+            {
+                new DataEntity("addresses.type1.zip", DataType.String, "text", _container, _collection),
+                new DataEntity("addresses.type1.street2", DataType.String, "text", _container, _collection),
+                new DataEntity("addresses.type1.street1", DataType.String, "text", _container, _collection),
+                new DataEntity("addresses.type1.city", DataType.String, "text", _container, _collection),
+                new DataEntity("addresses.type1.state", DataType.String, "text", _container, _collection),
+                                
+                new DataEntity("addresses.type0.zip", DataType.String, "text", _container, _collection),
+                new DataEntity("addresses.type0.street2", DataType.String, "text", _container, _collection),
+                new DataEntity("addresses.type0.street1", DataType.String, "text", _container, _collection),
+                new DataEntity("addresses.type0.city", DataType.String, "text", _container, _collection),
+                new DataEntity("addresses.type0.state", DataType.String, "text", _container, _collection)
+            };
 
+            entities.Should().Contain(expected);
         }
 
         [Fact]
