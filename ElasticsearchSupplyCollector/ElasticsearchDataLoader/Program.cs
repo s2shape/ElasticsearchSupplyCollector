@@ -20,6 +20,7 @@ namespace ElasticsearchDataLoader
                 });
 
                 Console.WriteLine("The data has been loaded!");
+                Console.ReadKey();
             }
             catch (Exception ex)
             {

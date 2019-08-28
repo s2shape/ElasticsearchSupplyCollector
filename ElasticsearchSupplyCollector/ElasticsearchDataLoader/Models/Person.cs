@@ -18,6 +18,9 @@ namespace ElasticsearchDataLoader.Models
         public Dictionary<string, Address> Addresses { get; set; }
         public List<Phone> PhoneNumbers { get; set; }
 
+        public string[] SimpleStrings { get; set; } = new[] { "str1", "str2", "str3" };
+        public int[] SimpleInts { get; set; } = new[] { 1, 2, 3 };
+
         public Person()
         {
             Addresses = new Dictionary<string, Address>();

@@ -37,12 +37,15 @@ namespace ElasticsearchSupplyCollector
             }
         }
 
+        //https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html
         private static DataType GetDbType(string type)
         {
             switch (type)
             {
                 case "text":
                     return DataType.String;
+                case "long":
+                    return DataType.Long;
                 default:
                     return DataType.Unknown;
             }

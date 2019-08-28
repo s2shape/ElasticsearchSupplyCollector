@@ -26,7 +26,7 @@ namespace ElasticsearchSupplyCollector.Tests
         }
 
         [Fact]
-        public void GetSchema_contains_nested_object_leaf_properties()
+        public void GetSchema_nested_object_leaf_properties()
         {
             var (collections, entities) = _sut.GetSchema(_container);
 
@@ -72,6 +72,26 @@ namespace ElasticsearchSupplyCollector.Tests
             result.Should().BeEquivalentTo(expected);
         }
 
+        [Fact]
+        public void GetSchema_sipmle_list()
+        {
+            var (collections, entities) = _sut.GetSchema(_container);
+
+            // assert
+            var expected = new List<DataEntity>()
+            {
+                new DataEntity("simpleStrings", DataType.String, "text", _container, _collection),
+                new DataEntity("simpleInts", DataType.Long, "long", _container, _collection)
+            };
+            var expectedNames = expected.Select(x => x.Name).ToList();
+
+            var result = entities
+                .Where(e => expectedNames.Contains(e.Name))
+                .ToList();
+
+            result.Should().BeEquivalentTo(expected);
+        }
+        
         [Fact]
         public void DataStoreTypes_returns_elasticsearch()
         {
