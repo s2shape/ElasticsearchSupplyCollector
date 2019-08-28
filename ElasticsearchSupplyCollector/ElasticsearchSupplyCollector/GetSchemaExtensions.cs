@@ -46,6 +46,22 @@ namespace ElasticsearchSupplyCollector
                     return DataType.String;
                 case "long":
                     return DataType.Long;
+                case "integer":
+                    return DataType.Int;
+                case "double":
+                    return DataType.Double;
+                case "float":
+                    return DataType.Float;
+                case "short":
+                    return DataType.Short;
+                case "byte":
+                    return DataType.Byte;
+                case "date":
+                    return DataType.DateTime;
+                case "boolean":
+                    return DataType.Boolean;
+                case "binary":
+                    return DataType.ByteArray;
                 default:
                     return DataType.Unknown;
             }
