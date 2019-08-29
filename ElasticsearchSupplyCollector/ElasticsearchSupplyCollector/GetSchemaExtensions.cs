@@ -1,6 +1,5 @@
 ﻿using Nest;
 using S2.BlackSwan.SupplyCollector.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 

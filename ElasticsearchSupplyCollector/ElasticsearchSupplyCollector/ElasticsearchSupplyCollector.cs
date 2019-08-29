@@ -1,6 +1,4 @@
-﻿using Elasticsearch.Net;
-using Nest;
-using Newtonsoft.Json;
+﻿using Nest;
 using S2.BlackSwan.SupplyCollector;
 using S2.BlackSwan.SupplyCollector.Models;
 using System;
@@ -86,11 +84,6 @@ namespace ElasticsearchSupplyCollector
             var resp = client.Ping();
 
             return resp.IsValid;
-        }
-
-        private class EsDocument
-        {
-            public string FirstName { get; set; }
         }
     }
 }
