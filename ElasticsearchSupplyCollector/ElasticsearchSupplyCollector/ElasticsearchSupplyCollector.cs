@@ -1,8 +1,10 @@
 ﻿using Nest;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using S2.BlackSwan.SupplyCollector;
 using S2.BlackSwan.SupplyCollector.Models;
-using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace ElasticsearchSupplyCollector
@@ -13,7 +15,32 @@ namespace ElasticsearchSupplyCollector
 
         public override List<string> CollectSample(DataEntity dataEntity, int sampleSize)
         {
-            throw new NotImplementedException();
+            var client = new ElasticsearchClientBuilder(dataEntity.Container.ConnectionString).GetClient();
+
+            var rawQuery = new
+            {
+                _source = new[] { dataEntity.Name }
+            };
+
+            var jsonQuery = JsonConvert.SerializeObject(rawQuery);
+
+            string index = dataEntity.Collection.Name;
+            var searchResponse = client.LowLevel.Search<SearchResponse<dynamic>>(index, jsonQuery);
+
+            var samples = searchResponse
+                .Documents
+                .Select(d => JsonConvert.DeserializeObject(d.ToString()))
+                .OfType<JObject>()
+                .Select(x => CollectSampleExtensions.CollectSample(x, dataEntity.Name))
+                .ToList();
+
+            //var samples = searchResponse
+            //    .Documents
+            //    .Select(d => CollectSampleExtensions.CollectSample(d, dataEntity.Name))
+            //    .OfType<string>()
+            //    .ToList();
+
+            return samples;
         }
 
         public override List<string> DataStoreTypes()
@@ -63,9 +90,9 @@ namespace ElasticsearchSupplyCollector
             return (dataCollections.ToList(), dataEntities.ToList());
         }
 
-        private List<DataEntity> GetSchema(string index, 
-            IGetMappingResponse mappings, 
-            DataContainer container, 
+        private List<DataEntity> GetSchema(string index,
+            IGetMappingResponse mappings,
+            DataContainer container,
             ElasticClient client)
         {
             var properties = mappings.Indices[index].Mappings.Values.First().Properties.ToList();
@@ -73,7 +100,7 @@ namespace ElasticsearchSupplyCollector
             var collection = new DataCollection(container, index);
 
             var dataEntities = properties.SelectMany(p => GetSchemaExtensions.GetSchema(p, container, collection)).ToList();
-            
+
             return dataEntities;
         }
 

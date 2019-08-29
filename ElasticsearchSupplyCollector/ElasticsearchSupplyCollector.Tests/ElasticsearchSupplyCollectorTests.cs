@@ -26,6 +26,20 @@ namespace ElasticsearchSupplyCollector.Tests
         }
 
         [Fact]
+        public void CollectSample()
+        {
+            // arrange
+            var zipEntity = new DataEntity("addresses.type1.zip", DataType.String, "text", _container, _collection);
+
+            // act
+            var result = _sut.CollectSample(zipEntity, 10);
+
+            // assert
+            result.Should().HaveCount(10);
+            result.Should().OnlyContain(x => x == "Zip1");
+        }
+
+        [Fact]
         public void GetSchema_nested_object_leaf_properties()
         {
             var (collections, entities) = _sut.GetSchema(_container);
