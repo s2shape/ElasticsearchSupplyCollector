@@ -72,10 +72,22 @@ namespace ElasticsearchSupplyCollector.Tests
         }
 
         [Fact]
+        public void GetSchema_returns_collections()
+        {
+            var knowCollections = new List<DataCollection> { new DataCollection(_container, "people") };
+
+            var (collections, _) = _sut.GetSchema(_container);
+
+            collections.Should().BeEquivalentTo(knowCollections);
+        }
+
+        [Fact]
         public void GetSchema_nested_object_leaf_properties()
         {
-            var (collections, entities) = _sut.GetSchema(_container);
+            // act
+            var (_, entities) = _sut.GetSchema(_container);
 
+            // assert
             var expected = new List<DataEntity>()
             {
                 new DataEntity("addresses.type1.zip", DataType.String, "text", _container, _collection),
@@ -100,7 +112,8 @@ namespace ElasticsearchSupplyCollector.Tests
         [Fact]
         public void GetSchema_list_of_objects()
         {
-            var (collections, entities) = _sut.GetSchema(_container);
+            // act
+            var (_, entities) = _sut.GetSchema(_container);
 
             // assert
             var expected = new List<DataEntity>()
@@ -121,7 +134,8 @@ namespace ElasticsearchSupplyCollector.Tests
         [Fact]
         public void GetSchema_sipmle_list()
         {
-            var (collections, entities) = _sut.GetSchema(_container);
+            // act
+            var (_, entities) = _sut.GetSchema(_container);
 
             // assert
             var expected = new List<DataEntity>()
@@ -144,6 +158,7 @@ namespace ElasticsearchSupplyCollector.Tests
             // act
             var result = _sut.DataStoreTypes();
 
+            // assert
             var expected = new List<string> { "Elasticsearch" };
 
             result.Should().BeEquivalentTo(expected);

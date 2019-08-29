@@ -75,7 +75,7 @@ namespace ElasticsearchSupplyCollector
 
             var mappings = client.GetMapping(new GetMappingRequest(Indices.AllIndices));
 
-            var dataEntities = indexes.SelectMany(idx => GetSchema(idx, mappings, container, client));
+            var dataEntities = indexes.SelectMany(idx => GetSchema(idx, mappings, container));
             var dataCollections = indexes.Select(idx => new DataCollection(container, idx));
 
             return (dataCollections.ToList(), dataEntities.ToList());
@@ -83,8 +83,7 @@ namespace ElasticsearchSupplyCollector
 
         private List<DataEntity> GetSchema(string index,
             IGetMappingResponse mappings,
-            DataContainer container,
-            ElasticClient client)
+            DataContainer container)
         {
             var properties = mappings.Indices[index].Mappings.Values.First().Properties.ToList();
 
