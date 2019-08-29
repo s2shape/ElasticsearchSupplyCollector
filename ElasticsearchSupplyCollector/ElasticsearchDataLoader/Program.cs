@@ -11,6 +11,8 @@ namespace ElasticsearchDataLoader
             {
                 var esClient = EsClient();
 
+                //TODO: Try to ping the server.
+
                 var documents = new SampleDataProvider().GetPeople(200);
 
                 documents.ForEach(d => {
@@ -19,7 +21,7 @@ namespace ElasticsearchDataLoader
                     Console.WriteLine(resp);
                 });
 
-                Console.WriteLine("The data has been loaded!");
+                Console.WriteLine("The test data has been loaded. Please press Enter.");
                 Console.ReadKey();
             }
             catch (Exception ex)
