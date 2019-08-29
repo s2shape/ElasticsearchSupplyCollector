@@ -31,14 +31,8 @@ namespace ElasticsearchSupplyCollector
                 .Documents
                 .Select(d => JsonConvert.DeserializeObject(d.ToString()))
                 .OfType<JObject>()
-                .Select(x => CollectSampleExtensions.CollectSample(x, dataEntity.Name))
+                .SelectMany(x => CollectSampleExtensions.CollectSample(x, dataEntity.Name))
                 .ToList();
-
-            //var samples = searchResponse
-            //    .Documents
-            //    .Select(d => CollectSampleExtensions.CollectSample(d, dataEntity.Name))
-            //    .OfType<string>()
-            //    .ToList();
 
             return samples;
         }

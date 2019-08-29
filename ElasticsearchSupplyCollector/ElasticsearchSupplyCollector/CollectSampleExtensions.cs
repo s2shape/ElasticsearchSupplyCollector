@@ -7,13 +7,15 @@ namespace ElasticsearchSupplyCollector
 {
     public static class CollectSampleExtensions
     {
-        public static string CollectSample(JObject src, string name)
+        public static List<string> CollectSample(JToken src, string name)
         {
-            var currentObject = src;
+            JToken currentObject = src;
             var currentName = name;
+
+            var results = new List<string>();
             while (true)
             {
-                if (IsNestedObject(currentName))
+                if (currentObject.Type == JTokenType.Object)
                 {
                     var namePath = currentName.Split(".");
                     string subPath = string.Join('.', namePath.Skip(1));
@@ -21,15 +23,28 @@ namespace ElasticsearchSupplyCollector
                     string rootName = namePath.First();
 
                     currentName = subPath;
-                    currentObject = (JObject)currentObject[rootName];
+                    currentObject = currentObject[rootName];
+                }
+                else if(currentObject.Type == JTokenType.Array)
+                {
+                    var array = (JArray)currentObject;
+
+                    var values = array.SelectMany(x => CollectSample(x, currentName)).ToList();
+                    results.AddRange(values);
+
+                    break;
                 }
                 else
                 {
-                    return currentObject[currentName].Value<string>();
+                    var val = currentObject.Value<string>();
+                    results.Add(val);
+                    break;
                 }
-            }         
+            }
+
+            return results;
         }
 
-        private static bool IsNestedObject(string name) => name.Contains(".");
+        //private static bool IsNestedObject(string name) => name.Contains(".");
     }
 }

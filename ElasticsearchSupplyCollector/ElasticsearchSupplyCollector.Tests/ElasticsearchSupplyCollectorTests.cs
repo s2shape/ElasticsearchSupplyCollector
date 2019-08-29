@@ -26,7 +26,7 @@ namespace ElasticsearchSupplyCollector.Tests
         }
 
         [Fact]
-        public void CollectSample()
+        public void CollectSample_nested_property()
         {
             // arrange
             var zipEntity = new DataEntity("addresses.type1.zip", DataType.String, "text", _container, _collection);
@@ -37,6 +37,36 @@ namespace ElasticsearchSupplyCollector.Tests
             // assert
             result.Should().HaveCount(10);
             result.Should().OnlyContain(x => x == "Zip1");
+        }
+
+        [Fact]
+        public void CollectSample_list_of_objects()
+        {
+            // arrange
+            var countryCode = new DataEntity("phoneNumbers.countryCode", DataType.String, "text", _container, _collection);
+            var knowCountryCodes = new[] { "CountryCode1", "CountryCode2", "CountryCode0" };
+
+            // act
+            var result = _sut.CollectSample(countryCode, 10);
+
+            // assert
+            result.Should().HaveCount(30);
+            result.Should().OnlyContain(x => knowCountryCodes.Contains(x));
+        }
+
+        [Fact]
+        public void CollectSample_simple_list()
+        {
+            // arrange
+            var simpleInts = new DataEntity("simpleInts", DataType.Long, "long", _container, _collection);
+            var knowInts = new[] { "1", "2", "3" };
+
+            // act
+            var result = _sut.CollectSample(simpleInts, 10);
+
+            // assert
+            result.Should().HaveCount(30);
+            result.Should().OnlyContain(x => knowInts.Contains(x));
         }
 
         [Fact]
