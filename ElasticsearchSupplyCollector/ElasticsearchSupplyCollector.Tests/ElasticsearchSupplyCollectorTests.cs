@@ -30,12 +30,13 @@ namespace ElasticsearchSupplyCollector.Tests
         {
             // arrange
             var zipEntity = new DataEntity("addresses.type1.zip", DataType.String, "text", _container, _collection);
+            const int sampleSize = 10;
 
             // act
-            var result = _sut.CollectSample(zipEntity, 10);
+            var result = _sut.CollectSample(zipEntity, sampleSize);
 
             // assert
-            result.Should().HaveCount(10);
+            result.Should().HaveCount(sampleSize);
             result.Should().OnlyContain(x => x == "Zip1");
         }
 
@@ -45,9 +46,10 @@ namespace ElasticsearchSupplyCollector.Tests
             // arrange
             var countryCode = new DataEntity("phoneNumbers.countryCode", DataType.String, "text", _container, _collection);
             var knowCountryCodes = new[] { "CountryCode1", "CountryCode2", "CountryCode0" };
+            const int sampleSize = 10;
 
             // act
-            var result = _sut.CollectSample(countryCode, 10);
+            var result = _sut.CollectSample(countryCode, sampleSize);
 
             // assert
             result.Should().HaveCount(30);

@@ -1,20 +1,25 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 
 namespace ElasticsearchSupplyCollector
 {
     public static class CollectSampleExtensions
     {
-        public static List<string> CollectSample(JToken src, string name)
+        public static List<string> CollectSample(this JToken src, string name)
         {
+            if (src == null)
+                return new List<string>();
+
             JToken currentObject = src;
             var currentName = name;
 
             var results = new List<string>();
             while (true)
             {
+                if (currentObject == null)
+                    break;
+
                 if (currentObject.Type == JTokenType.Object)
                 {
                     var namePath = currentName.Split(".");
@@ -44,7 +49,5 @@ namespace ElasticsearchSupplyCollector
 
             return results;
         }
-
-        //private static bool IsNestedObject(string name) => name.Contains(".");
     }
 }

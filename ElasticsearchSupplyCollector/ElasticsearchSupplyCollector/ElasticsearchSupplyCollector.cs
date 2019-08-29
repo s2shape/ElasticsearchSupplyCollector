@@ -4,21 +4,19 @@ using Newtonsoft.Json.Linq;
 using S2.BlackSwan.SupplyCollector;
 using S2.BlackSwan.SupplyCollector.Models;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace ElasticsearchSupplyCollector
 {
     public class ElasticsearchSupplyCollector : SupplyCollectorBase
     {
-        const int DEFAULT_SCHEMA_SAMPLE_SIZE = 10;
-
         public override List<string> CollectSample(DataEntity dataEntity, int sampleSize)
         {
             var client = new ElasticsearchClientBuilder(dataEntity.Container.ConnectionString).GetClient();
 
             var rawQuery = new
             {
+                size = sampleSize,
                 _source = new[] { dataEntity.Name }
             };
 
@@ -27,11 +25,10 @@ namespace ElasticsearchSupplyCollector
             string index = dataEntity.Collection.Name;
             var searchResponse = client.LowLevel.Search<SearchResponse<dynamic>>(index, jsonQuery);
 
-            var samples = searchResponse
-                .Documents
+            var samples = searchResponse.Documents
                 .Select(d => JsonConvert.DeserializeObject(d.ToString()))
-                .OfType<JObject>()
-                .SelectMany(x => CollectSampleExtensions.CollectSample(x, dataEntity.Name))
+                .OfType<JToken>()
+                .SelectMany(x => x.CollectSample(dataEntity.Name))
                 .ToList();
 
             return samples;
