@@ -11,7 +11,7 @@ namespace ElasticsearchSupplyCollector
             if (src == null)
                 return new List<string>();
 
-            JToken currentObject = src;
+            var currentObject = src;
             var currentName = name;
 
             var results = new List<string>();

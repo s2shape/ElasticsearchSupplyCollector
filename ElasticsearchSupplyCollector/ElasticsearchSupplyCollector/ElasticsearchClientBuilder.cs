@@ -15,7 +15,6 @@ namespace ElasticsearchSupplyCollector
         public ElasticClient GetClient()
         {
             var connectionSettings = new ConnectionSettings(new Uri(_connectionString));
-            connectionSettings.DisableDirectStreaming();
             var elasticClient = new ElasticClient(connectionSettings);
             
             return elasticClient;

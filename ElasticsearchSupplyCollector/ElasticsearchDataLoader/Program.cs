@@ -11,8 +11,6 @@ namespace ElasticsearchDataLoader
             {
                 var esClient = EsClient();
 
-                //TODO: Try to ping the server.
-
                 var documents = new SampleDataProvider().GetPeople(200);
 
                 documents.ForEach(d => {

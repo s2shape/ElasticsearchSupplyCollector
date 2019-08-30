@@ -94,6 +94,7 @@ namespace ElasticsearchSupplyCollector
 
             var client = new ElasticsearchClientBuilder(container.ConnectionString).GetClient();
 
+            // this is a native way to get the schema from the ES. But still we need to traverse it to get only leaf nodes
             var mappings = client.GetMapping(new GetMappingRequest(Indices.AllIndices));
 
             var dataEntities = indexes.SelectMany(idx => GetSchema(idx, mappings, container));
