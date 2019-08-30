@@ -14,13 +14,7 @@ namespace ElasticsearchSupplyCollector
         {
             var client = new ElasticsearchClientBuilder(dataEntity.Container.ConnectionString).GetClient();
 
-            var rawQuery = new
-            {
-                size = sampleSize,
-                _source = new[] { dataEntity.Name }
-            };
-
-            var jsonQuery = JsonConvert.SerializeObject(rawQuery);
+            string jsonQuery = BuildQuery(dataEntity, sampleSize);
 
             string index = dataEntity.Collection.Name;
             var searchResponse = client.LowLevel.Search<SearchResponse<dynamic>>(index, jsonQuery);
@@ -32,6 +26,33 @@ namespace ElasticsearchSupplyCollector
                 .ToList();
 
             return samples;
+        }
+
+        private static string BuildQuery(DataEntity dataEntity, int sampleSize)
+        {
+            var rawQuery = new
+            {
+                size = sampleSize,
+                _source = new[] { dataEntity.Name },
+                // this a native way to take random data from the ES
+                query = new
+                {
+                    function_score = new
+                    {
+                        query = new
+                        {
+                            match_all = new { }
+                        },
+                        functions = new[]
+                                    {
+                            new { random_score = new { } }
+                        }
+                    }
+                }
+            };
+
+            var jsonQuery = JsonConvert.SerializeObject(rawQuery);
+            return jsonQuery;
         }
 
         public override List<string> DataStoreTypes()
