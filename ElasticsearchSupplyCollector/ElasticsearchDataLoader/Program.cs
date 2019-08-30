@@ -22,7 +22,7 @@ namespace ElasticsearchDataLoader
                 });
 
                 Console.WriteLine("The test data has been loaded. Please press Enter.");
-                Console.ReadKey();
+                Console.Read();
             }
             catch (Exception ex)
             {
