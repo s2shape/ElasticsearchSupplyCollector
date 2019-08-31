@@ -89,7 +89,6 @@ namespace ElasticsearchSupplyCollector
         {
             var indexes = GetDataCollectionMetrics(container)
                 .Select(m => m.Name)
-                .Where(x => x == "people")
                 .ToList();
 
             var client = new ElasticsearchClientBuilder(container.ConnectionString).GetClient();
