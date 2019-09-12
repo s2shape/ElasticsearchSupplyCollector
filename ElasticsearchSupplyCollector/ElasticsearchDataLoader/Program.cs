@@ -19,8 +19,7 @@ namespace ElasticsearchDataLoader
                     Console.WriteLine(resp);
                 });
 
-                Console.WriteLine("The test data has been loaded. Please press Enter.");
-                Console.Read();
+                Console.WriteLine("The test data has been loaded.");
             }
             catch (Exception ex)
             {

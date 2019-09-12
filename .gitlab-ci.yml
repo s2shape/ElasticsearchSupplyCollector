@@ -6,7 +6,9 @@ stages:
 
 variables:
   ELASTIC_HOST: elasticsearch
-  ELASTIC_PORT: 9200
+  ELASTIC_PORT: "9200"
+  ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+  ELASTICSEARCH_URL: "http://elasticsearch:9200"
 
 build:
   stage: build
@@ -19,6 +21,7 @@ test:
   services:
     - name: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
       alias: elasticsearch
+      command: [ "bin/elasticsearch", "-Ediscovery.type=single-node" ]
     - name: docker.elastic.co/kibana/kibana:6.3.2
       alias: kibana
   script:
