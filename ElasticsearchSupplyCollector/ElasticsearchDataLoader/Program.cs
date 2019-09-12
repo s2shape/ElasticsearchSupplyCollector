@@ -30,7 +30,16 @@ namespace ElasticsearchDataLoader
 
         private static ElasticClient EsClient()
         {
-            var connectionSettings = new ConnectionSettings(new Uri("http://localhost:9200"));
+            var host = Environment.GetEnvironmentVariable("ELASTIC_HOST");
+            if (String.IsNullOrEmpty(host))
+                host = "localhost";
+
+            var port = Environment.GetEnvironmentVariable("ELASTIC_PORT");
+            if (String.IsNullOrEmpty(port)) {
+                port = "9200";
+            }
+
+            var connectionSettings = new ConnectionSettings(new Uri($"http://{host}:{port}"));
             var elasticClient = new ElasticClient(connectionSettings);
             
             return elasticClient;

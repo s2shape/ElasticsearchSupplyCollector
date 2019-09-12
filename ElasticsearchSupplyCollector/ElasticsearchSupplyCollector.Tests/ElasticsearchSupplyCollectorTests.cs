@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using S2.BlackSwan.SupplyCollector.Models;
 using System.Collections.Generic;
@@ -6,22 +7,26 @@ using Xunit;
 
 namespace ElasticsearchSupplyCollector.Tests
 {
-    public class ElasticsearchSupplyCollectorTests
+    public class ElasticsearchSupplyCollectorTests : IClassFixture<LaunchSettingsFixture>
     {
         private readonly ElasticsearchSupplyCollector _sut;
-
-        private readonly DataContainer _container = new DataContainer
-        {
-            ConnectionString = "http://localhost:9200"
-        };
-
+        private readonly DataContainer _container;
         private readonly DataCollection _collection;
+        private LaunchSettingsFixture _fixture;
 
         private readonly List<string> KNOWN_INDEXES = new List<string> { "people" };
 
-        public ElasticsearchSupplyCollectorTests()
-        {
+        public ElasticsearchSupplyCollectorTests(LaunchSettingsFixture fixture) {
+            _fixture = fixture;
+
+            var host = Environment.GetEnvironmentVariable("ELASTIC_HOST");
+            var port = Environment.GetEnvironmentVariable("ELASTIC_PORT");
+
             _sut = new ElasticsearchSupplyCollector();
+            _container = new DataContainer
+            {
+                ConnectionString = $"http://{host}:{port}"
+            };
             _collection = new DataCollection(_container, "people");
         }
 

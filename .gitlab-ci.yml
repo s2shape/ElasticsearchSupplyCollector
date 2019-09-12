@@ -1,0 +1,30 @@
+image: microsoft/dotnet:latest
+
+stages:
+  - build
+  - test
+
+variables:
+  ELASTIC_HOST: elasticsearch
+  ELASTIC_PORT: 9200
+
+build:
+  stage: build
+  script:
+    - cd ElasticsearchSupplyCollector
+    - dotnet build
+
+test:
+  stage: test
+  services:
+    - name: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+      alias: elasticsearch
+    - name: docker.elastic.co/kibana/kibana:6.3.2
+      alias: kibana
+  script:
+    - cd ElasticsearchSupplyCollector
+    - dotnet build
+    - cd ElasticsearchDataLoader
+    - dotnet run
+    - cd ..
+    - dotnet test
