@@ -7,7 +7,7 @@ sleep 20
 export ELASTIC_HOST=localhost
 export ELASTIC_PORT=9200
 
-cd ElasticsearchSupplyCollector/ElasticsearchDataLoader
+cd ElasticsearchDataLoader
 
 dotnet build
 
@@ -17,6 +17,6 @@ cd ../ElasticsearchSupplyCollector.Tests
 
 dotnet test
 
-cd ../../
+cd ..
 
 docker-compose down -v
