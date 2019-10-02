@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticsearchSupplyCollecto
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticsearchDataLoader", "ElasticsearchDataLoader\ElasticsearchDataLoader.csproj", "{2CF27ECB-961D-4BE7-A891-369D3550FACF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElasticsearchSupplyCollector.Tests", "ElasticsearchSupplyCollector.Tests\ElasticsearchSupplyCollector.Tests.csproj", "{790AD419-2774-419D-A64E-AC46A93C6AD5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElasticsearchSupplyCollectorTests", "ElasticsearchSupplyCollectorTests\ElasticsearchSupplyCollectorTests.csproj", "{790AD419-2774-419D-A64E-AC46A93C6AD5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

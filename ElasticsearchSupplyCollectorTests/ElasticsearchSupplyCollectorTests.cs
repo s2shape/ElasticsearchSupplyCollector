@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace ElasticsearchSupplyCollector.Tests
+namespace ElasticsearchSupplyCollectorTests
 {
     public class ElasticsearchSupplyCollectorTests : IClassFixture<LaunchSettingsFixture>
     {
