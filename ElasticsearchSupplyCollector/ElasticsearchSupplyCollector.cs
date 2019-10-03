@@ -1,4 +1,5 @@
-﻿using Nest;
+﻿using System;
+using Nest;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using S2.BlackSwan.SupplyCollector;

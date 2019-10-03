@@ -6,8 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="NEST" Version="6.8.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="S2.SupplyCollector" Version="1.1.1" />
+    <PackageReference Include="SupplyCollectorDataLoader" Version="1.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ElasticsearchSupplyCollector\ElasticsearchSupplyCollector.csproj" />
   </ItemGroup>
 
 </Project>

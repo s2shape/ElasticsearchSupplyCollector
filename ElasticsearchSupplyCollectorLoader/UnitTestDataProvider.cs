@@ -1,10 +1,11 @@
-﻿using ElasticsearchDataLoader.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Text;
+using ElasticsearchSupplyCollectorLoader.Models;
 
-namespace ElasticsearchDataLoader
+namespace ElasticsearchSupplyCollectorLoader
 {
-    public class SampleDataProvider
+    public class UnitTestDataProvider
     {
         public List<object> GetPeople(int number)
         {

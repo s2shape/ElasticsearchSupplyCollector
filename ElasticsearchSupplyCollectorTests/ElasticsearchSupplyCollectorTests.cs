@@ -9,7 +9,7 @@ namespace ElasticsearchSupplyCollectorTests
 {
     public class ElasticsearchSupplyCollectorTests : IClassFixture<LaunchSettingsFixture>
     {
-        private readonly ElasticsearchSupplyCollector _sut;
+        private readonly ElasticsearchSupplyCollector.ElasticsearchSupplyCollector _sut;
         private readonly DataContainer _container;
         private readonly DataCollection _collection;
         private LaunchSettingsFixture _fixture;
@@ -22,7 +22,7 @@ namespace ElasticsearchSupplyCollectorTests
             var host = Environment.GetEnvironmentVariable("ELASTIC_HOST");
             var port = Environment.GetEnvironmentVariable("ELASTIC_PORT");
 
-            _sut = new ElasticsearchSupplyCollector();
+            _sut = new ElasticsearchSupplyCollector.ElasticsearchSupplyCollector();
             _container = new DataContainer
             {
                 ConnectionString = $"http://{host}:{port}"
