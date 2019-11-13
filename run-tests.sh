@@ -6,17 +6,17 @@ sleep 20
 
 export ELASTIC_HOST=localhost
 export ELASTIC_PORT=9200
+export ES_JAVA_OPTS="-Xms512m -Xmx512m"
+export ELASTICSEARCH_URL="http://localhost:9200"
 
-cd ElasticsearchDataLoader
-
+dotnet restore -s https://www.myget.org/F/s2/ -s https://api.nuget.org/v3/index.json
 dotnet build
+dotnet publish
 
-dotnet run
-
-cd ../ElasticsearchSupplyCollector.Tests
+pushd ElasticsearchSupplyCollectorLoader/bin/Debug/netcoreapp2.2/publish
+dotnet SupplyCollectorDataLoader.dll -xunit ElasticsearchSupplyCollector $ELASTICSEARCH_URL
+popd
 
 dotnet test
-
-cd ..
 
 docker-compose down -v

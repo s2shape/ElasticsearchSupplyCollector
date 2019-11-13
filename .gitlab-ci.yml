@@ -53,6 +53,6 @@ load_test:
     - cp -f /SupplyCollectorDataLoader/SupplyCollectorDataLoader/bin/Debug/netcoreapp2.2/SupplyCollectorDataLoader.runtimeconfig.json .
     - dotnet SupplyCollectorDataLoader.dll -init ElasticsearchSupplyCollector http://$ELASTIC_HOST:$ELASTIC_PORT
     - dotnet SupplyCollectorDataLoader.dll -xunit ElasticsearchSupplyCollector http://$ELASTIC_HOST:$ELASTIC_PORT
-    - dotnet SupplyCollectorDataLoader.dll -samples ElasticsearchSupplyCollector http://$ELASTIC_HOST:$ELASTIC_PORT TestCollection Test1:int,Test2:string,Test3:bool,Test4:double,Test5 100000
+    - dotnet SupplyCollectorDataLoader.dll -samples ElasticsearchSupplyCollector http://$ELASTIC_HOST:$ELASTIC_PORT testCollection Test1:int,Test2:string,Test3:bool,Test4:double,Test5 100000
     - cd $ROOT_PROJECT_PATH/ElasticsearchSupplyCollectorTests/bin/Debug/netcoreapp2.2/publish
     - SupplyCollectorTestHarness
