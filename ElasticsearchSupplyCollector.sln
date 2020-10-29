@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.572
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticsearchSupplyCollector", "ElasticsearchSupplyCollector\ElasticsearchSupplyCollector.csproj", "{9E1F0624-E707-4707-BA16-09F591EE63B7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticsearchSupplyCollectorTests", "ElasticsearchSupplyCollectorTests\ElasticsearchSupplyCollectorTests.csproj", "{790AD419-2774-419D-A64E-AC46A93C6AD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElasticsearchSupplyCollectorLoader", "ElasticsearchSupplyCollectorLoader\ElasticsearchSupplyCollectorLoader.csproj", "{34924826-8FBA-47FA-A890-FD48E11B113B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticsearchSupplyCollectorLoader", "ElasticsearchSupplyCollectorLoader\ElasticsearchSupplyCollectorLoader.csproj", "{34924826-8FBA-47FA-A890-FD48E11B113B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
