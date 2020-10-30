@@ -105,8 +105,6 @@ namespace ElasticsearchSupplyCollector
             }
 
             var jsonMappings = mappingsList.ToArray();
-            // this is a native way to get the schema from the ES. But still we need to traverse it to get only leaf nodes
-            //var mappings = client.GetMapping(new GetMappingRequest(Indices.AllIndices));
 
             List<DataEntity> dataEntities = new List<DataEntity>();
             foreach (var mappings in jsonMappings)
@@ -123,30 +121,27 @@ namespace ElasticsearchSupplyCollector
             string mappings,
             DataContainer container)
         {
-            var jsonObject = JsonConvert.DeserializeObject<MyJsonType>(mappings);
-            var properties = jsonObject.PropertyKey;
+            var entityNames = EntitiesFromJson(index, mappings);
 
-            //var json = JsonConvert.DeserializeObject<IEnumerable<KeyValuePair<string, string>>>(mappings);
-            //var dictionary = json.ToDictionary(x => x.Key, x => x.Value);
-            //var json = JObject.Parse(mappings);
-            //var properties = json.First.First.First.First.First;
-            //var entities = new List<Dictionary<string, object>>();
-            //foreach (var dict in properties["properties"].Children())
-            //{
-            //    var entity = dict
-            //        .ToDictionary<JProperty, string, object>(property => property.Name, property => property.Value);
-            //    entities.Add(entity);
-            //}
-            throw new NotImplementedException();
-            //var properties = mappings.Indices[index].Mappings.Values.First().Properties.ToList();
+            var collection = new DataCollection(container, index);
 
-            //var collection = new DataCollection(container, index);
+            var dataEntities = new List<DataEntity>();
+            foreach (var name in entityNames)
+            {
+                dataEntities.Add(
+                new DataEntity(name, DataType.String, "string", container, collection));
+            }
 
-            //var dataEntities = properties.SelectMany(p => GetSchemaExtensions.GetSchema(p, container, collection)).ToList();
-
-            //return dataEntities;
+            return dataEntities;
         }
-
+        private List<string> EntitiesFromJson(string indexName, string json)
+        {
+            var jsonParser = JObject.Parse(json);
+            var subObject = jsonParser.SelectToken($"$.{indexName}.mappings.properties");
+            var jsonString = subObject.ToString();
+            var responseDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+            return responseDictionary.Keys.ToList();
+        }
         public override bool TestConnection(DataContainer container)
         {
             var client = new ElasticsearchClientBuilder(container.ConnectionString).GetClient();
