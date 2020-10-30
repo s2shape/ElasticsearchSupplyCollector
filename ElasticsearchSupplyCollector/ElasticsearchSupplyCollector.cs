@@ -123,8 +123,8 @@ namespace ElasticsearchSupplyCollector
             string mappings,
             DataContainer container)
         {
-            var myJsonObject = JsonConvert.DeserializeObject<MyJsonType>(mappings);
-            var properties = myJsonObject.MyListProperty.First();
+            var jsonObject = JsonConvert.DeserializeObject<MyJsonType>(mappings);
+            var properties = jsonObject.PropertyKey;
 
             //var json = JsonConvert.DeserializeObject<IEnumerable<KeyValuePair<string, string>>>(mappings);
             //var dictionary = json.ToDictionary(x => x.Key, x => x.Value);
