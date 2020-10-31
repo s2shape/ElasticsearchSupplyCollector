@@ -1,0 +1,1 @@
+dotnet publish --output C:\Users\sever\OneDrive\Desktop\SecondSight\s2.blackswan\S2.BlackSwan.SupplyListener\bin\Debug\netcoreapp3.1\plugins\ElasticsearchSupplyCollector

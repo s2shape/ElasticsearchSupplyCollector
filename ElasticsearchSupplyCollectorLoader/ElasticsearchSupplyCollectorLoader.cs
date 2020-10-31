@@ -57,7 +57,7 @@ namespace ElasticsearchSupplyCollectorLoader
 
                 client.Index((object)doc, i => i
                     .Index(dataEntities[0].Collection.Name)
-                    .Type(dataEntities[0].Collection.Name + "_Type")
+                    //.Type(dataEntities[0].Collection.Name + "_Type")
                     .Id(rows)
                 );
 
